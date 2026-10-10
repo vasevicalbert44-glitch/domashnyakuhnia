@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="uk"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Домашня кухня — Дніпро</title>
+<style>
+:root{--bg:#7b0915;--w1:#3a0a14;--w2:#5c0e1d;--w3:#8e1b2e;--gold:#f5a623;--txt:#fbf3ee}
+*{box-sizing:border-box;margin:0;-webkit-tap-highlight-color:transparent}
+body{font-family:Georgia,'Times New Roman',serif;color:var(--txt);background:linear-gradient(180deg,var(--bg) 0,var(--w2) 420px,var(--w1) 100%);background-attachment:fixed;padding-bottom:40px}
+body.has{padding-bottom:230px}
+button{font:inherit;cursor:pointer}
+header{text-align:center;padding:18px 16px 6px;background:var(--bg)}
+header img{width:170px;display:block;margin:auto}header h1{font-size:2rem}
+header p{opacity:.8;font-size:.9rem;margin-top:2px}
+.wrap{max-width:640px;margin:auto;padding:0 14px}
+.search{margin:14px 0 4px;position:relative}
+.search input{width:100%;padding:13px 16px 13px 42px;border-radius:16px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.1);color:#fff;font:inherit;backdrop-filter:blur(6px)}
+.search input::placeholder{color:rgba(255,255,255,.55)}
+.search:before{content:"🔍";position:absolute;left:14px;top:12px}
+.chips{position:sticky;top:0;z-index:5;display:flex;gap:8px;overflow-x:auto;padding:10px 14px;margin:0 -14px;background:rgba(58,10,20,.85);backdrop-filter:blur(10px);scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chips button{flex:none;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.08);color:#fff;padding:8px 14px;border-radius:20px;white-space:nowrap}
+.chips button.on{background:var(--w3);border-color:var(--gold)}
+h2{margin:22px 0 10px;font-size:1.3rem}
+.card{display:flex;gap:12px;align-items:center;background:linear-gradient(135deg,rgba(255,255,255,.12),rgba(255,255,255,.05));border:1px solid rgba(255,255,255,.14);border-radius:18px;padding:10px;margin-bottom:10px;backdrop-filter:blur(6px)}
+.ph{position:relative;overflow:hidden;flex:none;width:84px;height:84px;border-radius:18px;background:radial-gradient(circle at 30% 25%,rgba(255,255,255,.22),rgba(142,27,46,.55));display:grid;place-items:center;font-size:2.5rem;line-height:1}
+.ph i{font-style:normal;filter:drop-shadow(1.5px 0 0 #fff) drop-shadow(-1.5px 0 0 #fff) drop-shadow(0 1.5px 0 #fff) drop-shadow(0 -1.5px 0 #fff) drop-shadow(0 4px 4px rgba(0,0,0,.4));transform:rotate(-6deg)}
+.ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.ph.ok i{display:none}
+.info{flex:1;min-width:0}
+.info b{display:block;line-height:1.2;margin-bottom:4px}
+.sz{display:flex;align-items:center;gap:8px;margin-top:4px;font-size:.9rem}
+.sz .w{opacity:.7;flex:1}
+.sz .p{font-weight:bold;white-space:nowrap}
+.q{display:flex;align-items:center;gap:6px}
+.q button{width:32px;height:32px;border-radius:50%;border:0;background:var(--w3);color:#fff;font-size:1.15rem;line-height:1}
+.q button.add{background:#fff;color:var(--w2)}
+.q span{min-width:16px;text-align:center}
+.hide{display:none}
+footer{text-align:center;padding:28px 14px 10px;opacity:.75;font-size:.88rem;line-height:1.6}
+/* bar */
+#bar{position:fixed;left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom,0px));z-index:10;max-width:620px;margin:auto;padding:14px 16px;border-radius:26px;background:rgba(110,16,32,.82);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.25);box-shadow:0 10px 40px rgba(0,0,0,.45);transform:translateY(150%);transition:transform .45s cubic-bezier(.2,1.2,.4,1),background .5s,color .5s}
+#bar.show{transform:none}
+#bar.gold{background:linear-gradient(90deg,#ffc400,#ff9100);color:#3a0a14;border-color:#fff}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.btn{border:0;background:#fff;color:var(--w2);padding:10px 20px;border-radius:24px;font-weight:bold}
+#bar.gold .btn{background:#3a0a14;color:#ffd27a}
+.track{height:10px;border-radius:8px;background:rgba(255,255,255,.22);margin:9px 0 6px;overflow:hidden}
+#fill{height:100%;width:0;background:linear-gradient(90deg,#ffd27a,#f5a623);transition:width .5s;border-radius:8px}
+#bar.gold #fill{background:#3a0a14}
+#msg{font-size:.9rem}
+.sl{display:flex;align-items:center;gap:8px;font-size:.82rem;margin-top:8px}
+.sl input{flex:1;accent-color:#f5a623}
+#modal,#dm{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:flex-end;justify-content:center;z-index:20}
+#modal.on,#dm.on{display:flex}
+.sheet{background:#4a0c18;color:#fbf3ee;border-radius:22px 22px 0 0;padding:20px;width:100%;max-width:560px;max-height:92vh;overflow:auto}
+.sheet h2{color:#f5c26b}
+.sheet input,.sheet select,.sheet textarea{width:100%;padding:11px;margin:5px 0;border-radius:10px;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.1);color:#fff;font:inherit}
+.sheet option{color:#000}
+.sheet .btn{width:100%;background:var(--gold);color:#3a0a14;margin-top:8px}
+.sum{font-size:.9rem;margin:8px 0;line-height:1.5}
+canvas{position:fixed;inset:0;pointer-events:none;z-index:30}
+#toast{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-140px);background:#f5a623;color:#3a0a14;padding:14px 20px;border-radius:16px;font-weight:bold;z-index:40;transition:transform .5s;text-align:center;width:max-content;max-width:90vw}
+#toast.on{transform:translateX(-50%)}
+
+body{background:#f3e7dc!important;color:#3a0a14}body.has{padding-bottom:230px}
+.in2{max-width:1000px;margin:auto;padding:0 16px}
+.top{background:#4a0c18}.top .in2{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:12px;padding-bottom:12px}
+.brand{display:flex;align-items:center;gap:8px;color:#fff;text-decoration:none;font-family:Impact,'Arial Narrow',sans-serif;line-height:1}.brand img{height:42px}.brand b{font-weight:normal;font-size:1.25rem;letter-spacing:1px}
+nav{display:flex;gap:18px}nav a{color:#fff;text-decoration:none;font-size:.72rem;letter-spacing:1px}
+@media(max-width:640px){nav{display:none}}
+#cartbtn{position:relative;width:40px;height:40px;border-radius:50%;border:1px solid rgba(255,255,255,.5);background:none;color:#fff;font-size:1.1rem}
+#cartbtn i{position:absolute;top:-4px;right:-4px;background:var(--gold);color:#3a0a14;border-radius:50%;width:18px;height:18px;font:bold 11px/18px sans-serif;text-align:center}
+.hero{background:#4a0c18;padding:0 0 16px}.herobox{display:flex;gap:0;background:linear-gradient(135deg,#6b1020,#8e1b2e 60%,#a8334a);border-radius:22px;overflow:hidden;min-height:300px;margin:0 16px;max-width:968px;margin-inline:auto;color:#fff}
+.ht{flex:1;padding:28px 22px;display:flex;flex-direction:column;justify-content:center;align-items:flex-start}
+.ht h1{font-family:Impact,'Arial Narrow',sans-serif;font-weight:normal;font-size:2.6rem;line-height:1;letter-spacing:1px}
+.ht em{font:italic 1.5rem 'Brush Script MT',cursive;color:#f5c26b}
+.cta{margin-top:18px;background:#4a0c18;color:#fff;padding:12px 20px;border-radius:24px;text-decoration:none;font-size:.78rem;letter-spacing:1px;border:1px solid rgba(255,255,255,.4)}
+.himg,.fi{position:relative;flex:1;display:grid;place-items:center;font-size:7rem;overflow:hidden}.himg span,.fi span{filter:drop-shadow(0 8px 10px rgba(0,0,0,.4));transform:rotate(-6deg)}
+.himg img,.fi img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+@media(max-width:640px){.herobox{flex-direction:column-reverse}.himg{min-height:170px}.ht h1{font-size:2.2rem}}
+.feat{padding:28px 0}.fbox{display:flex;gap:18px;align-items:center}.ft{flex:1}.ft small{display:inline-block;margin-bottom:8px;opacity:.7;font-size:.75rem}
+.ft h2{font-family:Impact,'Arial Narrow',sans-serif;font-weight:normal;font-size:1.7rem;color:#4a0c18;margin:0 0 10px}.ft p{font-size:.9rem;line-height:1.5;opacity:.8}
+.fa{display:flex;gap:10px;align-items:center;margin-top:14px;flex-wrap:wrap}.fq{display:flex;align-items:center;gap:10px;border:1px solid #c9a99a;border-radius:20px;padding:4px 10px}.fq button{border:0;background:none;font-size:1.2rem;color:#4a0c18}
+.cta2{border:0;background:#6b1020;color:#fff;border-radius:22px;padding:11px 20px;font-size:.78rem;letter-spacing:1px}
+.fi{min-height:240px;border-radius:22px;background:linear-gradient(135deg,#f9e1cf,#e9b9a0);font-size:6rem}
+.badge{position:absolute;top:10px;left:10px;z-index:2;width:78px;height:78px;border-radius:50%;background:#6b1020;color:#fff;font-size:.6rem;text-align:center;display:grid;place-items:center;line-height:1.3;transform:rotate(-10deg)}
+@media(max-width:640px){.fbox{flex-direction:column}.fi{width:100%}}
+.quote{padding:6px 0 22px}.qb{position:relative;background:linear-gradient(135deg,#4a0c18,#6b1020);color:#fff;border-radius:26px;padding:42px 18px;text-align:center}
+.qb p{font-family:Impact,'Arial Narrow',sans-serif;font-size:1.25rem;line-height:1.35;letter-spacing:1px}
+.pill{position:absolute;font-size:.65rem;border:1px solid rgba(255,255,255,.5);border-radius:14px;padding:3px 10px;letter-spacing:1px}.p1{top:12px;left:14px}.p2{top:12px;right:14px}.p3{bottom:12px;left:14px}.p4{bottom:12px;right:14px}
+.sec{font-family:Impact,'Arial Narrow',sans-serif;font-weight:normal;letter-spacing:1px;font-size:1.2rem;color:#4a0c18;margin:18px 0 8px}
+.search input{background:#fff;color:#3a0a14;border:1px solid #e3cdbf}.search input::placeholder{color:#a08478}
+.chips{background:rgba(243,231,220,.92)}.chips button{background:#fff;color:#4a0c18;border-color:#e3cdbf}.chips button.on{background:#6b1020;color:#fff}
+h2{color:#6b1020}
+.card{background:#fff;border-color:#ecd9cc;color:#3a0a14}.ph{background:radial-gradient(circle at 30% 25%,#fff,#f3d2c4)}
+.q button.add{background:#6b1020;color:#fff}.q button{background:#8e1b2e}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.steps div{position:relative;background:#fff;border-radius:16px;padding:14px;border:1px solid #ecd9cc}
+.steps i{position:absolute;top:8px;left:8px;background:#6b1020;color:#fff;border-radius:50%;width:26px;height:26px;font:12px/26px sans-serif;text-align:center}
+.steps span{display:block;font-size:2.4rem;text-align:center;margin:8px 0}.steps b{display:block;font-size:.78rem;color:#4a0c18}.steps small{font-size:.75rem;opacity:.75}
+@media(max-width:640px){.steps{grid-template-columns:1fr 1fr}}
+.foot{padding:24px 0 34px}.foot .in2{display:flex;gap:18px;flex-wrap:wrap;align-items:center;background:#fff;border-radius:22px;padding:18px;max-width:968px;border:1px solid #ecd9cc}
+.fl{flex:1;min-width:200px}.fl b{font-family:Impact,'Arial Narrow',sans-serif;font-weight:normal;font-size:1.8rem;color:#4a0c18;line-height:1}.fl p{font-size:.85rem;margin-top:8px;line-height:1.6}
+.perks{display:grid;grid-template-columns:1fr 1fr;gap:10px;flex:1;min-width:240px}.perks div{text-align:center;font-size:1.5rem}.perks small{display:block;font-size:.7rem;opacity:.8}
+
+/* ===== СЛАЙДЕР КОМПЛЕКСНИХ ОБІДІВ (Пн–Пт) ===== */
+.dsl{background:#4a0c18;padding:12px 0 14px}
+.dsl h3{font-family:Impact,'Arial Narrow',sans-serif;font-weight:normal;letter-spacing:1px;font-size:1rem;color:#f5c26b;margin-bottom:8px}
+.dwrap{position:relative}
+.dtrack{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.dtrack::-webkit-scrollbar{display:none}
+.dc{position:relative;flex:none;width:210px;height:140px;border-radius:18px;overflow:hidden;border:1px solid rgba(255,255,255,.25);padding:0;color:#fff;text-align:left;scroll-snap-align:start;background:linear-gradient(135deg,#8e1b2e,#a8334a)}
+.dc .em{position:absolute;inset:0;display:grid;place-items:center;font-size:3.2rem;filter:drop-shadow(0 4px 6px rgba(0,0,0,.4))}
+.dc img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.dc .lb{position:absolute;left:0;right:0;bottom:0;padding:22px 12px 9px;background:linear-gradient(transparent,rgba(30,4,10,.85));display:flex;justify-content:space-between;align-items:flex-end;font-size:.82rem}
+.dc .lb b{font-family:Impact,'Arial Narrow',sans-serif;font-weight:normal;letter-spacing:1px;font-size:1.05rem}
+.dn{position:absolute;top:50%;transform:translateY(-50%);z-index:3;width:34px;height:34px;border-radius:50%;border:0;background:rgba(255,255,255,.9);color:#4a0c18;font-size:1.3rem;line-height:1;box-shadow:0 2px 8px rgba(0,0,0,.4)}
+.dn.l{left:-6px}.dn.r{right:-6px}
+@media(min-width:1040px){.dn.l{left:-44px}.dn.r{right:-44px}}
+.dd img.big{width:100%;height:180px;object-fit:cover;border-radius:16px;margin-bottom:10px}
+.dd ul{list-style:none;padding:0;margin:8px 0 12px;font-size:.92rem;line-height:1.7}
+.dd ul li{border-bottom:1px dashed rgba(255,255,255,.2);display:flex;justify-content:space-between;gap:10px}
+.dd ul li span{opacity:.65}
+.dd .sz{padding:6px 0}
+</style></head><body>
+<div class="top"><div class="in2"><a class="brand" href="#">
+<img id="logo" src="logo.png" alt="" onerror="this.remove()"><b>ДОМАШНЯ<br>КУХНЯ</b></a>
+<nav><a href="#days">ОБІДИ НА ТИЖДЕНЬ</a><a href="#menu">МЕНЮ</a><a href="#about">ПРО НАС</a><a href="#how">ЯК ЗАМОВИТИ</a><a href="#contacts">КОНТАКТИ</a></nav>
+<button id="cartbtn" aria-label="Кошик">🛒<i id="cnt" style="display:none">0</i></button></div></div>
+
+<!-- СЛАЙДЕР: 5 днів, свайп вліво-вправо; натиснути = відкрити меню дня і замовити -->
+<section class="dsl" id="days"><div class="in2"><h3>🍽 КОМПЛЕКСНІ ОБІДИ · ПОНЕДІЛОК — П'ЯТНИЦЯ</h3>
+<div class="dwrap"><button class="dn l" id="dl" aria-label="Назад">‹</button><div class="dtrack" id="dtrack"></div><button class="dn r" id="dr" aria-label="Вперед">›</button></div></div></section>
+
+<section class="hero"><div class="in2 herobox"><div class="ht"><h1>СМАЧНІ<br>ОБІДИ<br><em>починаються</em><br>ТУТ</h1><a class="cta" href="#menu">ДИВИТИСЬ МЕНЮ →</a></div>
+<div class="himg"><span>🍲</span><img src="hero.jpg" alt="" onerror="this.remove()"></div></div></section>
+<section class="feat" id="about"><div class="in2 fbox"><div class="ft"><small>🌿 ДОМАШНІ РЕЦЕПТИ</small><h2>КОМПЛЕКСНИЙ ОБІД<br>КОЖЕН ДЕНЬ</h2><p>Перша страва, друга з гарніром, салат і компот — ситно, швидко та як удома. Без першого — 160 грн.</p>
+<div class="fa"><div class="fq"><button onclick="ch('0_0_0',-1)">−</button><span id="fq">0</span><button onclick="ch('0_0_0',1)">+</button></div><button class="cta2" onclick="ch('0_0_0',1)">В КОШИК · 190 грн</button></div></div>
+<div class="fi"><div class="badge">НАЙКРАЩИЙ<br>ВИБІР</div><span>🍽</span><img src="lunch.jpg" alt="" onerror="this.remove()"></div></div></section>
+<section class="quote"><div class="in2"><div class="qb"><span class="pill p1">ПРОСТО</span><span class="pill p2">СМАЧНО</span><span class="pill p3">ШВИДКО</span><span class="pill p4">ПО-ДОМАШНЬОМУ</span>
+<p>Є СМАКИ,<br>ЯКІ ЗАЛИШАЮТЬСЯ НАЗАВЖДИ.<br>І ДОМАШНЯ КУХНЯ — ОДИН З НИХ.</p></div></div></section>
+<div class="wrap">
+ <h3 class="sec">🍴 ОБИРАЙТЕ СМАК</h3>
+ <div class="search"><input id="s" placeholder="Знайти страву..."></div>
+ <div class="chips" id="chips"></div>
+ <div id="menu"></div>
+</div>
+<section id="how"><div class="in2"><h3 class="sec">👩‍🍳 ЗАМОВЛЯТИ ЛЕГКО</h3><div class="steps">
+<div><i>01</i><span>🍲</span><b>ОБЕРІТЬ СТРАВИ</b><small>Перегляньте меню та додайте улюблене в кошик.</small></div>
+<div><i>02</i><span>🛒</span><b>ПЕРЕВІРТЕ КОШИК</b><small>Шторка внизу покаже суму та знижки.</small></div>
+<div><i>03</i><span>📲</span><b>ОФОРМІТЬ ЗАМОВЛЕННЯ</b><small>Імʼя, телефон і адреса — і замовлення в нас.</small></div>
+<div><i>04</i><span>😋</span><b>СМАКУЙТЕ</b><small>Привеземо гарячим або забирайте самі.</small></div></div></div></section>
+<section id="contacts" class="foot"><div class="in2"><div class="fl"><b>ДОМАШНЯ<br>КУХНЯ</b><p>📍 пр. Богдана Хмельницького, 156А<br>📍 вул. Космічна, 49Г<br>Дніпро</p></div>
+<div class="perks"><div>🚚<small>Безкоштовна доставка від 700 грн</small></div><div>🎁<small>20 порцій обідів = −10% на все</small></div><div>🌿<small>Свіжі продукти</small></div><div>❤️<small>Смак як удома</small></div></div></div></section>
+
+<div id="bar"><div class="row"><b id="tot">0 грн</b><button class="btn" id="go">Замовити</button></div>
+ <div class="track"><div id="fill"></div></div><div id="msg"></div>
+ <div class="sl"><span>🍽 Порції обідів</span><input type="range" id="rng" min="0" max="20" value="0"><span id="rv">0/20</span></div></div>
+
+<!-- Вікно меню дня -->
+<div id="dm"><div class="sheet" id="dmsheet"></div></div>
+
+<div id="modal"><div class="sheet">
+ <h2 style="margin-top:0">Оформлення</h2><div class="sum" id="sum"></div>
+ <input id="nm" placeholder="Ваше імʼя"><input id="ph" type="tel" placeholder="Телефон">
+ <select id="mode"><option value="delivery">Доставка</option><option value="pickup">Самовивіз</option></select>
+ <input id="ad" placeholder="Адреса доставки">
+ <select id="pk" style="display:none"><option>пр. Богдана Хмельницького, 156А</option><option>вул. Космічна, 49Г</option></select>
+ <textarea id="cm" rows="2" placeholder="Коментар"></textarea>
+ <button class="btn" id="send">Відправити замовлення</button>
+ <button class="btn" style="background:transparent;color:#fff" id="close">Закрити</button>
+ <div id="res" class="sum"></div></div></div>
+<div id="toast"></div><canvas id="cv"></canvas>
+
+<script>
+/* =====================================================================
+   МЕНЮ.  Формат рядка: [назва, вихід, ціна, "english-name"]
+   • "а/б" у ціні = дві порції (мала/велика)
+   • "english-name" = підпис того, що на фото, І назва файлу картинки:
+         кладіть фото в папку  img/  як  img/<english-name>.jpg
+     напр. Борщ → img/borscht.jpg.  Немає фото — показується емодзі.
+   ===================================================================== */
+const M=[
+["Комплексні обіди","🍽",[["Комплексний обід","перша, друга з гарніром, салат + компот","190","complex-lunch"],["Комплексний без першого","друга з гарніром, салат + компот","160","complex-lunch-no-soup"]]],
+["Перші страви","🍲",[["Борщ червоний/зелений","200г/400г","49/98","borscht"],["Солянка","200г/400г","55/110","solyanka"],["Суп дня","200г/400г","45/90","soup-of-the-day"],["Окрошка з курячим філе","350г","94","okroshka-chicken"]]],
+["Гарнір","🍚",[["Картопляне пюре","150г/300г","50/100","mashed-potatoes"],["Картопля по селянськи","150г/300г","55/110","village-style-potatoes"],["Гречана каша","150г/300г","40/80","buckwheat"],["Макарони","150г/300г","40/80","pasta"],["Спаржа","150г/300г","70/140","asparagus"],["Овочеве рагу","150г/300г","60/120","vegetable-stew"],["Рис з овочами","150г/300г","50/100","rice-with-vegetables"],["Овочеве соте","150г/300г","80/160","vegetable-saute"]]],
+["Основні страви","🥘",[["Картопляні зрази","1шт (100г)","70","potato-zrazy"],["Плов з курячим філе","150г/300г","70/140","chicken-pilaf"],["Печеня зі свининою","150г/300г","80/160","pork-roast"],["Пельмені Домашні","150г/300г","80/160","homemade-dumplings"],["Вареники Домашні","150г/300г","65/120","homemade-vareniki"],["Торт Печінковий","120г","80","liver-cake"],["Жульєнс з куркою та грибами","140г","78","julienne-chicken-mushroom"],["Гратен (рибний або м'ясний)","300г","140","gratin"]]],
+["М'ясні страви","🍗",[["Відбивна куряча","100г","78","chicken-chop"],["Відбивна зі свинини","100г","82","pork-chop"],["Відбивна кур. з ананасом","150г","96","chicken-chop-pineapple"],["Відбивна по-французьки","150г","98","french-style-chop"],["Котлета куряча","100г","62","chicken-cutlet"],["Котлета свин-гов","100г","62","pork-beef-cutlet"],["Тефтеля в томат. соусі","100г","68","meatball-tomato-sauce"],["Карден-блю","120г","85","chicken-cordon-bleu"],["Парова котлета з філе","110г","66","steamed-chicken-cutlet"],["Гуляш зі свинини","150г/300г","80/160","pork-goulash"],["Гуляш яловичий","150г/300г","100/200","beef-goulash"],["Голубці","2шт/порція","120","cabbage-rolls"],["Перець фарширований","1шт","88","stuffed-pepper"],["Четверть курки","200г","110","chicken-quarter"],["Печінка куряча","150г/300г","70/140","chicken-liver"],["Філе куряче на грилі","120г","98","grilled-chicken-fillet"],["Биток з помідором та сиром","120г","84","chicken-tomato-cheese"],["Шашличок курячий","150г","108","chicken-skewer"],["Шашличок з лаваша зі свининою","200г","118","pork-lavash-skewer"]]],
+["Рибні страви","🐟",[["Хек смажений","110г","84","fried-hake"],["Котлета рибна","100г","68","fish-cutlet"],["Стейк Карпа","130г","180","carp-steak"],["Скумбрія на грилі","110г","110","grilled-mackerel"]]],
+["Салати","🥗",[["Олів'є","150г","55","olivier-salad"],["Крабовий","150г","60","crab-salad"],["Оселедець під шубою","150г","65","herring-under-fur-coat"],["Ніжність","150г","75","nezhnost-salad"],["Грецький","150г","65","greek-salad"],["Мімоза","150г","70","mimosa-salad"],["Свіжість","130г","45","freshness-salad"],["Бурячок","130г","45","beetroot-salad"],["Вінегрет","150г","50","vinaigrette"],["Морква по-корейськи","130г","45","korean-carrot"]]],
+["Сніданок","🥞",[["Млинці з сиром","2шт/200г","90","pancakes-cottage-cheese"],["Млинці з м'ясом","2шт/200г","100","pancakes-meat"],["Сирна запіканка","130г","74","cottage-cheese-casserole"],["Сирники (порція 2шт)","2шт","90","syrniki"]]],
+["Власна випічка","🥟",[["Пиріжки смажені (картопля/капуста)","1шт","35","fried-pies-potato-cabbage"],["Пиріжки з м'ясом","1шт","40","meat-pies"],["Чебурек свин-гов","1шт","65","cheburek"],["Міні Піца","1шт","60","mini-pizza"],["Бургер","1шт","80","burger"],["Самса з куркою","1шт","68","samsa-chicken"],["Хачапурі з сиром","1шт","68","khachapuri"],["Пиріжки духові в асортименті","1шт","50","baked-pies-assorted"]]],
+["Солоденьке","🍰",[["Торт «Наполеон»","150г","68","napoleon-cake"],["Торт «Графиня вишня»","130г","68","countess-cherry-cake"],["Еклер","80г","40","eclair"],["Трайфл (вишня/згущ. молоко)","1шт","75","trifle"],["Горішки у стакані","1ст","80","nuts-in-cup"],["Сирне кільце","","65","cheese-ring"]]],
+["Холодні напої","🥤",[["Компот / Узвар","300мл","40","compote"],["Cola / Fanta / Sprite","0,33/0,5л","36/38","cola-fanta-sprite"],["Сік в асортименті","0,23л","30","juice"],["Detox","0,5л","58","detox-05l"],["Detox","1л","75","detox-1l"],["Карпатська джерельна (газ, с/г, н/г)","0,5/1л","25/30","mineral-water"],["Лимонад натахтарі","0,5л","75","lemonade-tarhun"]]],
+["Гарячі напої","☕",[["Американо","","30","americano"],["Американо з молоком","","35","americano-milk"],["Еспресо","","30","espresso"],["Еспресо з молоком","","35","espresso-milk"],["Капучино XL","","40","cappuccino-xl"],["Латте XL","","45","latte-xl"]]]
+];
+
+/* =====================================================================
+   КОМПЛЕКСНІ ОБІДИ ПО ДНЯХ (слайдер вгорі).
+   Змініть назви страв на реальні. Фото дня: days/monday.jpg ... days/friday.jpg
+   ===================================================================== */
+const DAYS=[
+{en:"monday",name:"Понеділок",em:"🍲",dishes:[["Перша страва","Борщ червоний"],["Друга страва","Котлета куряча"],["Гарнір","Картопляне пюре"],["Салат","Олів'є"],["Напій","Компот"]]},
+{en:"tuesday",name:"Вівторок",em:"🥣",dishes:[["Перша страва","Солянка"],["Друга страва","Печеня зі свининою"],["Гарнір","Гречана каша"],["Салат","Вінегрет"],["Напій","Компот"]]},
+{en:"wednesday",name:"Середа",em:"🍛",dishes:[["Перша страва","Суп дня"],["Друга страва","Плов з курячим філе"],["Гарнір","—"],["Салат","Свіжість"],["Напій","Компот"]]},
+{en:"thursday",name:"Четвер",em:"🍗",dishes:[["Перша страва","Борщ зелений"],["Друга страва","Відбивна зі свинини"],["Гарнір","Макарони"],["Салат","Грецький"],["Напій","Компот"]]},
+{en:"friday",name:"П'ятниця",em:"🐟",dishes:[["Перша страва","Суп дня"],["Друга страва","Хек смажений"],["Гарнір","Рис з овочами"],["Салат","Бурячок"],["Напій","Компот"]]}
+];
+
+const K=[["торт","🍰"],["окрошка","🥣"],["борщ","🍲"],["солянка","🍲"],["суп","🍲"],["гуляш","🍲"],["пюре","🥔"],["картопл","🥔"],["зрази","🥔"],["греча","🌾"],["макарон","🍝"],["спаржа","🌱"],["рагу","🥕"],["рис ","🍚"],["соте","🍆"],["плов","🍛"],["печеня","🥩"],["пельмен","🥟"],["вареник","🥟"],["жульєн","🍄"],["гратен","🧀"],["риб","🐟"],["хек","🐟"],["карп","🐟"],["скумбр","🐟"],["оселедец","🐟"],["куряч","🍗"],["кур.","🍗"],["курк","🍗"],["карден","🍗"],["четверть","🍗"],["філе","🍗"],["відбивна","🥩"],["котлета","🍖"],["печін","🍖"],["биток","🥩"],["тефтел","🧆"],["голуб","🥬"],["перець","🫑"],["шашлич","🍢"],["крабов","🦀"],["свіжість","🥒"],["морква","🥕"],["олів","🥗"],["салат","🥗"],["ніжн","🥗"],["грецьк","🥗"],["мімоз","🥗"],["бурячок","🥗"],["вінегрет","🥗"],["млинц","🥞"],["сирник","🥞"],["запіканка","🧀"],["пиріжки","🥟"],["чебурек","🥟"],["самса","🥟"],["піца","🍕"],["бургер","🍔"],["хачапурі","🧀"],["еклер","🍫"],["трайфл","🍒"],["горіш","🌰"],["кільце","🍩"],["компот","🍹"],["cola","🥤"],["сік","🧃"],["detox","🥤"],["карпатська","💧"],["лимонад","🍋"],["американо","☕"],["еспресо","☕"],["капучино","☕"],["латте","☕"]];
+const E=(n,d)=>{n=n.toLowerCase()+" ";const f=K.find(k=>n.includes(k[0]));return f?f[1]:d};
+const FREE=700,FULL=20,cart={},L={};
+const $=id=>document.getElementById(id),fmt=n=>Math.round(n)+" грн";
+const unit=(a,b)=>/[а-яa-z]/i.test(a)?a:a+(b.match(/[а-яa-zшт]+$/i)||[""])[0];
+const alt=s=>s.replace(/-/g," ");
+const qrow=(k,w,pr)=>`<div class="sz"><span class="w">${w||""}</span><span class="p">${pr} грн</span><div class="q"><button class="rm hide" onclick="ch('${k}',-1)">−</button><span class="hide" id="q_${k}">0</span><button class="add" onclick="ch('${k}',1)">+</button></div></div>`;
+let html="",chips="";
+M.forEach(([cat,em,items],ci)=>{
+ chips+=`<button data-c="c${ci}">${cat}</button>`;
+ html+=`<section id="c${ci}"><h2>${cat}</h2>`+items.map(([n,w,p,en],ii)=>{
+  const ps=p.split("/"),ws=ps.length>1?w.split("/").map((x,k,a)=>k<a.length-1?unit(x,a[a.length-1]):x):[w];
+  const rows=ps.map((pr,s)=>{const k=`${ci}_${ii}_${s}`;L[k]={name:n+(ps.length>1&&ws[s]?` (${ws[s]})`:""),price:+pr,lunch:ci==0};
+   return qrow(k,ws[s],pr)}).join("");
+  return `<div class="card" data-n="${n.toLowerCase()}" data-en="${en}"><div class="ph"><i>${E(n,em)}</i><img src="img/${en}.jpg" alt="${alt(en)}" loading="lazy" onload="this.parentNode.classList.add('ok')" onerror="this.remove()"></div><div class="info"><b>${n}</b>${rows}</div></div>`}).join("")+`</section>`});
+$("menu").innerHTML=html;$("chips").innerHTML=chips;
+$("chips").onclick=e=>{const c=e.target.dataset.c;if(c)$(c).scrollIntoView({behavior:"smooth"})};
+$("s").oninput=e=>{const v=e.target.value.toLowerCase();document.querySelectorAll(".card").forEach(c=>c.classList.toggle("hide",!(c.dataset.n.includes(v)||c.dataset.en.includes(v))));document.querySelectorAll("#menu section").forEach(s=>s.classList.toggle("hide",!s.querySelector(".card:not(.hide)")))};
+
+/* ---------- слайдер днів ---------- */
+let th="",dh="";
+DAYS.forEach((d,i)=>{
+ L["d"+i+"_0"]={name:"Комплексний обід — "+d.name,price:190,lunch:true};
+ L["d"+i+"_1"]={name:"Комплексний без першого — "+d.name,price:160,lunch:true};
+ th+=`<button class="dc" onclick="openDay(${i})" aria-label="${d.name}"><span class="em">${d.em}</span><img src="days/${d.en}.jpg" alt="${d.en} complex lunch" onerror="this.remove()"><span class="lb"><b>${d.name.toUpperCase()}</b><span>від 160 грн</span></span></button>`;
+ dh+=`<div class="dd hide" id="dd${i}"><h2 style="margin-top:0">${d.name} — комплексний обід</h2>
+ <img class="big" src="days/${d.en}.jpg" alt="${d.en} complex lunch" onerror="this.remove()">
+ <ul>${d.dishes.map(x=>`<li><span>${x[0]}</span><b>${x[1]}</b></li>`).join("")}</ul>
+ ${qrow("d"+i+"_0","Повний (з першою)",190)}${qrow("d"+i+"_1","Без першого",160)}</div>`;
+});
+$("dtrack").innerHTML=th;
+$("dmsheet").innerHTML=dh+`<button class="btn" onclick="closeDay()">Готово</button>`;
+function openDay(i){document.querySelectorAll(".dd").forEach((e,k)=>e.classList.toggle("hide",k!=i));$("dm").classList.add("on")}
+function closeDay(){$("dm").classList.remove("on")}
+$("dm").onclick=e=>{if(e.target.id=="dm")closeDay()};
+const step=()=>($("dtrack").firstElementChild?.offsetWidth||210)+10;
+$("dl").onclick=()=>$("dtrack").scrollBy({left:-step(),behavior:"smooth"});
+$("dr").onclick=()=>$("dtrack").scrollBy({left:step(),behavior:"smooth"});
+
+const lunchQty=()=>Object.keys(cart).reduce((s,k)=>s+(L[k].lunch?cart[k]:0),0);
+function ch(k,d){cart[k]=Math.max(0,(cart[k]||0)+d);upd()}
+function calc(){const sub=Object.keys(cart).reduce((s,k)=>s+cart[k]*L[k].price,0),full=lunchQty()>=FULL,disc=full?Math.round(sub*.1):0;return{sub,disc,total:sub-disc,full,free:full||sub>=FREE}}
+let fired=false;
+function upd(){
+ Object.keys(L).forEach(k=>{const q=cart[k]||0,e=$("q_"+k);e.textContent=q;e.classList.toggle("hide",!q);e.previousElementSibling.classList.toggle("hide",!q)});
+ const c=calc(),lq=lunchQty(),n=Object.values(cart).reduce((a,b)=>a+b,0);
+ $("bar").classList.toggle("show",n>0);$("cnt").textContent=n;$("cnt").style.display=n?"":"none";$("fq").textContent=cart["0_0_0"]||0;document.body.classList.toggle("has",n>0);
+ $("tot").textContent=fmt(c.total)+(c.disc?` (−${c.disc} грн)`:"");
+ $("fill").style.width=Math.min(100,c.total/FREE*100)+"%";
+ $("rng").value=Math.min(lq,FULL);$("rv").textContent=Math.min(lq,FULL)+"/"+FULL;
+ $("bar").classList.toggle("gold",c.free);
+ const left=FREE-c.total;
+ $("msg").textContent=c.full?"🎉 20 порцій: −10% на все та безкоштовна доставка!":c.free?"🚚 У вас безкоштовна доставка!":left<=60?`Ще трішки — і доставка безкоштовна! Залишилось ${fmt(left)}`:left<=200?`Майже! Ще ${fmt(left)} до безкоштовної доставки`:`До безкоштовної доставки залишилось ${fmt(left)} · до 700 грн доставка 25 грн/км`;
+ if(c.full&&!fired){fired=true;boom();$("toast").textContent="🎉 Вітаємо! −10% на все та безкоштовна доставка";$("toast").classList.add("on");setTimeout(()=>$("toast").classList.remove("on"),4000)}
+ if(!c.full)fired=false;
+}
+$("rng").oninput=e=>{const v=+e.target.value,main=Object.keys(cart).find(k=>cart[k]&&L[k].lunch)||"0_0_0",others=lunchQty()-(cart[main]||0);cart[main]=Math.max(0,v-others);upd()};
+const items=()=>Object.keys(cart).filter(k=>cart[k]).map(k=>({name:L[k].name,qty:cart[k],price:L[k].price}));
+$("go").onclick=()=>{const c=calc();$("sum").innerHTML=items().map(i=>`${i.name} × ${i.qty} = ${i.qty*i.price} грн`).join("<br>")+(c.disc?`<br>Знижка 10%: −${c.disc} грн`:"")+`<br><b>Разом: ${c.total} грн</b>`+(c.free?"<br>Доставка безкоштовна":"<br>Доставка: 25 грн/км");$("modal").classList.add("on")};
+$("cartbtn").onclick=()=>{if(Object.values(cart).some(v=>v))$("go").click()};
+$("close").onclick=()=>$("modal").classList.remove("on");
+$("mode").onchange=e=>{$("ad").style.display=e.target.value=="delivery"?"":"none";$("pk").style.display=e.target.value=="pickup"?"":"none"};
+$("send").onclick=async()=>{
+ if(!$("nm").value||!$("ph").value){$("res").textContent="Вкажіть імʼя та телефон";return}
+ const c=calc(),mode=$("mode").value;
+ if(mode=="delivery"&&!$("ad").value){$("res").textContent="Вкажіть адресу";return}
+ try{const r=await fetch("/.netlify/functions/order",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({name:$("nm").value,phone:$("ph").value,mode,address:$("ad").value,pickup:$("pk").value,comment:$("cm").value,items:items(),discount:c.disc,freeDelivery:c.free,total:c.total})});
+  if(!r.ok)throw 0;$("res").textContent="✅ Дякуємо! Замовлення прийнято, ми з вами зв'яжемось.";for(const k in cart)delete cart[k];upd()}
+ catch(e){$("res").textContent="⚠️ Не вдалося відправити (у перегляді Telegram не працює — тільки після публікації на Netlify)."}};
+function boom(){const cv=$("cv"),x=cv.getContext("2d");cv.width=innerWidth;cv.height=innerHeight;const P=[];
+ for(let b=0;b<5;b++){const cx=Math.random()*cv.width,cy=cv.height*(.2+Math.random()*.4);for(let i=0;i<50;i++){const a=Math.random()*6.28,s=2+Math.random()*5;P.push({x:cx,y:cy,vx:Math.cos(a)*s,vy:Math.sin(a)*s,l:70,c:["#f5a623","#fff","#ff5a5a","#ffd27a"][i%4]})}}
+ (function f(){x.clearRect(0,0,cv.width,cv.height);P.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=.08;p.l--;x.globalAlpha=Math.max(0,p.l/70);x.fillStyle=p.c;x.fillRect(p.x,p.y,4,4)});if(P.some(p=>p.l>0))requestAnimationFrame(f);else x.clearRect(0,0,cv.width,cv.height)})()}
+upd();
+</script></body></html>
