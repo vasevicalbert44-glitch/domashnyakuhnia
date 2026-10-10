@@ -123,7 +123,7 @@ h2{color:#6b1020}
 .dd .sz{padding:6px 0}
 </style></head><body>
 <div class="top"><div class="in2"><a class="brand" href="#">
-<img id="logo" src="logo.png" alt="" onerror="this.remove()"><b>ДОМАШНЯ<br>КУХНЯ</b></a>
+<img id="logo" src="logo.PNG" alt="" onerror="this.remove()"><b>ДОМАШНЯ<br>КУХНЯ</b></a>
 <nav><a href="#days">ОБІДИ НА ТИЖДЕНЬ</a><a href="#menu">МЕНЮ</a><a href="#about">ПРО НАС</a><a href="#how">ЯК ЗАМОВИТИ</a><a href="#contacts">КОНТАКТИ</a></nav>
 <button id="cartbtn" aria-label="Кошик">🛒<i id="cnt" style="display:none">0</i></button></div></div>
 
@@ -199,11 +199,11 @@ const M=[
    Змініть назви страв на реальні. Фото дня: days/monday.jpg ... days/friday.jpg
    ===================================================================== */
 const DAYS=[
-{en:"monday",name:"Понеділок",em:"🍲",dishes:[["Перша страва","Борщ червоний"],["Друга страва","Котлета куряча"],["Гарнір","Картопляне пюре"],["Салат","Олів'є"],["Напій","Компот"]]},
-{en:"tuesday",name:"Вівторок",em:"🥣",dishes:[["Перша страва","Солянка"],["Друга страва","Печеня зі свининою"],["Гарнір","Гречана каша"],["Салат","Вінегрет"],["Напій","Компот"]]},
-{en:"wednesday",name:"Середа",em:"🍛",dishes:[["Перша страва","Суп дня"],["Друга страва","Плов з курячим філе"],["Гарнір","—"],["Салат","Свіжість"],["Напій","Компот"]]},
-{en:"thursday",name:"Четвер",em:"🍗",dishes:[["Перша страва","Борщ зелений"],["Друга страва","Відбивна зі свинини"],["Гарнір","Макарони"],["Салат","Грецький"],["Напій","Компот"]]},
-{en:"friday",name:"П'ятниця",em:"🐟",dishes:[["Перша страва","Суп дня"],["Друга страва","Хек смажений"],["Гарнір","Рис з овочами"],["Салат","Бурячок"],["Напій","Компот"]]}
+{en:"monday",img:"lunch1.PNG",name:"Понеділок",em:"🍲",dishes:[["Перша страва","Борщ червоний"],["Друга страва","Котлета куряча"],["Гарнір","Картопляне пюре"],["Салат","Олів'є"],["Напій","Компот"]]},
+{en:"tuesday",img:"lunch2.PNG",name:"Вівторок",em:"🥣",dishes:[["Перша страва","Солянка"],["Друга страва","Печеня зі свининою"],["Гарнір","Гречана каша"],["Салат","Вінегрет"],["Напій","Компот"]]},
+{en:"wednesday",img:"lunch3.png",name:"Середа",em:"🍛",dishes:[["Перша страва","Суп дня"],["Друга страва","Плов з курячим філе"],["Гарнір","—"],["Салат","Свіжість"],["Напій","Компот"]]},
+{en:"thursday",img:"lunch4.PNG",name:"Четвер",em:"🍗",dishes:[["Перша страва","Борщ зелений"],["Друга страва","Відбивна зі свинини"],["Гарнір","Макарони"],["Салат","Грецький"],["Напій","Компот"]]},
+{en:"friday",img:"lunch5.PNG",name:"П'ятниця",em:"🐟",dishes:[["Перша страва","Суп дня"],["Друга страва","Хек смажений"],["Гарнір","Рис з овочами"],["Салат","Бурячок"],["Напій","Компот"]]}
 ];
 
 const K=[["торт","🍰"],["окрошка","🥣"],["борщ","🍲"],["солянка","🍲"],["суп","🍲"],["гуляш","🍲"],["пюре","🥔"],["картопл","🥔"],["зрази","🥔"],["греча","🌾"],["макарон","🍝"],["спаржа","🌱"],["рагу","🥕"],["рис ","🍚"],["соте","🍆"],["плов","🍛"],["печеня","🥩"],["пельмен","🥟"],["вареник","🥟"],["жульєн","🍄"],["гратен","🧀"],["риб","🐟"],["хек","🐟"],["карп","🐟"],["скумбр","🐟"],["оселедец","🐟"],["куряч","🍗"],["кур.","🍗"],["курк","🍗"],["карден","🍗"],["четверть","🍗"],["філе","🍗"],["відбивна","🥩"],["котлета","🍖"],["печін","🍖"],["биток","🥩"],["тефтел","🧆"],["голуб","🥬"],["перець","🫑"],["шашлич","🍢"],["крабов","🦀"],["свіжість","🥒"],["морква","🥕"],["олів","🥗"],["салат","🥗"],["ніжн","🥗"],["грецьк","🥗"],["мімоз","🥗"],["бурячок","🥗"],["вінегрет","🥗"],["млинц","🥞"],["сирник","🥞"],["запіканка","🧀"],["пиріжки","🥟"],["чебурек","🥟"],["самса","🥟"],["піца","🍕"],["бургер","🍔"],["хачапурі","🧀"],["еклер","🍫"],["трайфл","🍒"],["горіш","🌰"],["кільце","🍩"],["компот","🍹"],["cola","🥤"],["сік","🧃"],["detox","🥤"],["карпатська","💧"],["лимонад","🍋"],["американо","☕"],["еспресо","☕"],["капучино","☕"],["латте","☕"]];
@@ -212,6 +212,9 @@ const FREE=700,FULL=20,cart={},L={};
 const $=id=>document.getElementById(id),fmt=n=>Math.round(n)+" грн";
 const unit=(a,b)=>/[а-яa-z]/i.test(a)?a:a+(b.match(/[а-яa-zшт]+$/i)||[""])[0];
 const alt=s=>s.replace(/-/g," ");
+/* якщо img/<name>.jpg не знайдено — пробуємо інші розширення */
+const EXT=["jpg","png","PNG","jpeg","JPG"];
+function nx(i){const n=(+i.dataset.t||0)+1;i.dataset.t=n;if(n<EXT.length)i.src="img/"+i.dataset.s+"."+EXT[n];else i.remove()}
 const qrow=(k,w,pr)=>`<div class="sz"><span class="w">${w||""}</span><span class="p">${pr} грн</span><div class="q"><button class="rm hide" onclick="ch('${k}',-1)">−</button><span class="hide" id="q_${k}">0</span><button class="add" onclick="ch('${k}',1)">+</button></div></div>`;
 let html="",chips="";
 M.forEach(([cat,em,items],ci)=>{
@@ -220,7 +223,7 @@ M.forEach(([cat,em,items],ci)=>{
   const ps=p.split("/"),ws=ps.length>1?w.split("/").map((x,k,a)=>k<a.length-1?unit(x,a[a.length-1]):x):[w];
   const rows=ps.map((pr,s)=>{const k=`${ci}_${ii}_${s}`;L[k]={name:n+(ps.length>1&&ws[s]?` (${ws[s]})`:""),price:+pr,lunch:ci==0};
    return qrow(k,ws[s],pr)}).join("");
-  return `<div class="card" data-n="${n.toLowerCase()}" data-en="${en}"><div class="ph"><i>${E(n,em)}</i><img src="img/${en}.jpg" alt="${alt(en)}" loading="lazy" onload="this.parentNode.classList.add('ok')" onerror="this.remove()"></div><div class="info"><b>${n}</b>${rows}</div></div>`}).join("")+`</section>`});
+  return `<div class="card" data-n="${n.toLowerCase()}" data-en="${en}"><div class="ph"><i>${E(n,em)}</i><img src="img/${en}.jpg" data-s="${en}" alt="${alt(en)}" loading="lazy" onload="this.parentNode.classList.add('ok')" onerror="nx(this)"></div><div class="info"><b>${n}</b>${rows}</div></div>`}).join("")+`</section>`});
 $("menu").innerHTML=html;$("chips").innerHTML=chips;
 $("chips").onclick=e=>{const c=e.target.dataset.c;if(c)$(c).scrollIntoView({behavior:"smooth"})};
 $("s").oninput=e=>{const v=e.target.value.toLowerCase();document.querySelectorAll(".card").forEach(c=>c.classList.toggle("hide",!(c.dataset.n.includes(v)||c.dataset.en.includes(v))));document.querySelectorAll("#menu section").forEach(s=>s.classList.toggle("hide",!s.querySelector(".card:not(.hide)")))};
@@ -230,9 +233,9 @@ let th="",dh="";
 DAYS.forEach((d,i)=>{
  L["d"+i+"_0"]={name:"Комплексний обід — "+d.name,price:190,lunch:true};
  L["d"+i+"_1"]={name:"Комплексний без першого — "+d.name,price:160,lunch:true};
- th+=`<button class="dc" onclick="openDay(${i})" aria-label="${d.name}"><span class="em">${d.em}</span><img src="days/${d.en}.jpg" alt="${d.en} complex lunch" onerror="this.remove()"><span class="lb"><b>${d.name.toUpperCase()}</b><span>від 160 грн</span></span></button>`;
+ th+=`<button class="dc" onclick="openDay(${i})" aria-label="${d.name}"><span class="em">${d.em}</span><img src="${d.img}" alt="${d.en} complex lunch" onerror="this.remove()"><span class="lb"><b>${d.name.toUpperCase()}</b><span>від 160 грн</span></span></button>`;
  dh+=`<div class="dd hide" id="dd${i}"><h2 style="margin-top:0">${d.name} — комплексний обід</h2>
- <img class="big" src="days/${d.en}.jpg" alt="${d.en} complex lunch" onerror="this.remove()">
+ <img class="big" src="${d.img}" alt="${d.en} complex lunch" onerror="this.remove()">
  <ul>${d.dishes.map(x=>`<li><span>${x[0]}</span><b>${x[1]}</b></li>`).join("")}</ul>
  ${qrow("d"+i+"_0","Повний (з першою)",190)}${qrow("d"+i+"_1","Без першого",160)}</div>`;
 });
