@@ -214,6 +214,21 @@ const unit=(a,b)=>/[а-яa-z]/i.test(a)?a:a+(b.match(/[а-яa-zшт]+$/i)||[""])
 const alt=s=>s.replace(/-/g," ");
 /* якщо img/<name>.jpg не знайдено — пробуємо інші розширення */
 const EXT=["jpg","png","PNG","jpeg","JPG"];
+/* Відповідність: english-name страви → точна назва файлу в папці img (з розширенням).
+   Якщо додаєте нове фото — допишіть сюди рядок:  "english-name":"назва файлу.png"  */
+const F={
+"borscht":"borsh.png","solyanka":"solyanka.png","soup-of-the-day":"sup dnya.png",
+"mashed-potatoes":"pyure.PNG","village-style-potatoes":"kartoplya po-selyansʹky.PNG","buckwheat":"hrechka.PNG","pasta":"makarony.PNG","asparagus":"sparzha.png","rice-with-vegetables":"rys z ovochamy.png",
+"chicken-pilaf":"plov.PNG","pork-roast":"pechenya.PNG","homemade-dumplings":"pelʹmeni.png","homemade-vareniki":"vareniki.png","liver-cake":"tort pechinkovyy.png","julienne-chicken-mushroom":"zhulʹyen z kurkoyu ta hrybamy.png","gratin":"hraten.png",
+"chicken-chop":"vidbivna kuryacha.png","pork-chop":"vidbivna svynyacha.png","chicken-chop-pineapple":"vidbivna z ananasom.PNG","french-style-chop":"vidbivna po-frantsuzʹky.PNG","chicken-cutlet":"kotleta kuryacha.png","meatball-tomato-sauce":"midboly.PNG","chicken-cordon-bleu":"kordon blyu.PNG","steamed-chicken-cutlet":"tyufteli na paru.PNG","pork-goulash":"hulyash zi svynyny.png","beef-goulash":"hulyash z yalovychyny.PNG","cabbage-rolls":"holubtsi.png","stuffed-pepper":"farshurovanyy peretsʹ.png","chicken-quarter":"chvertʹ kuryacha.png","chicken-liver":"pechinka.PNG","grilled-chicken-fillet":"file kuryache na hryli.png","chicken-tomato-cheese":"bitok.PNG","chicken-skewer":"shashlyk kuryachyy.PNG","pork-lavash-skewer":"shashlyk z lavasha zi svynynoyu.png",
+"fried-hake":"khek smazhenyy.png","fish-cutlet":"rybna kotleta.png","carp-steak":"steyk karpa.png","grilled-mackerel":"skumbriya na hryli.png",
+"olivier-salad":"olivʹye.png","crab-salad":"krabovʹye.PNG","herring-under-fur-coat":"oseledetsʹ pid shuboyu.PNG","nezhnost-salad":"salat nizhnistʹ.PNG","greek-salad":"salat hretsʹkyy.png","mimosa-salad":"mimoza.PNG","freshness-salad":"salat svyzhistʹ.PNG","beetroot-salad":"buryak.PNG","vinaigrette":"vinehret.png","korean-carrot":"morkva po-koreysʹky.PNG",
+"pancakes-cottage-cheese":"mlyntsi.png","pancakes-meat":"mlyntsi.png","cottage-cheese-casserole":"syrna zapikanka.PNG","syrniki":"syrnyky.png",
+"fried-pies-potato-cabbage":"zhareni pyrizhky.PNG","cheburek":"cheburek.png","mini-pizza":"mini-pitsa.PNG","burger":"burger.png","samsa-chicken":"samsa.PNG","khachapuri":"khachapuri.PNG","baked-pies-assorted":"dukhovi pyrizhky.png",
+"napoleon-cake":"napoleon.png","countess-cherry-cake":"tort arafynya vyshnya.PNG","eclair":"ekler.PNG","trifle":"trayfl vyshnya.png","nuts-in-cup":"horishky.png",
+"compote":"kompot.png","cola-fanta-sprite":"kolafantasprajt 0,5l.png","juice":"sik.png","detox-05l":"voda detoks.png","detox-1l":"voda detoks.png","mineral-water":"voda 0,5.png","lemonade-tarhun":"lymonad.png"
+};
+const im=en=>"img/"+(F[en]?encodeURIComponent(F[en]):en+".jpg");
 function nx(i){const n=(+i.dataset.t||0)+1;i.dataset.t=n;if(n<EXT.length)i.src="img/"+i.dataset.s+"."+EXT[n];else i.remove()}
 const qrow=(k,w,pr)=>`<div class="sz"><span class="w">${w||""}</span><span class="p">${pr} грн</span><div class="q"><button class="rm hide" onclick="ch('${k}',-1)">−</button><span class="hide" id="q_${k}">0</span><button class="add" onclick="ch('${k}',1)">+</button></div></div>`;
 let html="",chips="";
@@ -223,7 +238,7 @@ M.forEach(([cat,em,items],ci)=>{
   const ps=p.split("/"),ws=ps.length>1?w.split("/").map((x,k,a)=>k<a.length-1?unit(x,a[a.length-1]):x):[w];
   const rows=ps.map((pr,s)=>{const k=`${ci}_${ii}_${s}`;L[k]={name:n+(ps.length>1&&ws[s]?` (${ws[s]})`:""),price:+pr,lunch:ci==0};
    return qrow(k,ws[s],pr)}).join("");
-  return `<div class="card" data-n="${n.toLowerCase()}" data-en="${en}"><div class="ph"><i>${E(n,em)}</i><img src="img/${en}.jpg" data-s="${en}" alt="${alt(en)}" loading="lazy" onload="this.parentNode.classList.add('ok')" onerror="nx(this)"></div><div class="info"><b>${n}</b>${rows}</div></div>`}).join("")+`</section>`});
+  return `<div class="card" data-n="${n.toLowerCase()}" data-en="${en}"><div class="ph"><i>${E(n,em)}</i><img src="${im(en)}" data-s="${en}" alt="${alt(en)}" loading="lazy" onload="this.parentNode.classList.add('ok')" onerror="nx(this)"></div><div class="info"><b>${n}</b>${rows}</div></div>`}).join("")+`</section>`});
 $("menu").innerHTML=html;$("chips").innerHTML=chips;
 $("chips").onclick=e=>{const c=e.target.dataset.c;if(c)$(c).scrollIntoView({behavior:"smooth"})};
 $("s").oninput=e=>{const v=e.target.value.toLowerCase();document.querySelectorAll(".card").forEach(c=>c.classList.toggle("hide",!(c.dataset.n.includes(v)||c.dataset.en.includes(v))));document.querySelectorAll("#menu section").forEach(s=>s.classList.toggle("hide",!s.querySelector(".card:not(.hide)")))};
