@@ -222,6 +222,8 @@ const EXT=["jpg","png","PNG","jpeg","JPG"];
 /* Відповідність: english-name страви → точна назва файлу в папці img (з розширенням).
    Якщо додаєте нове фото — допишіть сюди рядок:  "english-name":"назва файлу.png"  */
 const F={
+"complex-lunch":"kompleksnuy obid.PNG","complex-lunch-no-soup":"kompleksnuy obid bez pershogo.PNG",
+"americano":"amerikano.PNG","americano-milk":"amerikano z molokom.PNG","espresso":"espesso.PNG","espresso-milk":"espresso z molokom.PNG","cappuccino-xl":"kapuchino.PNG","latte-xl":"late.PNG",
 "borscht":"borsh.png","solyanka":"solyanka.png","soup-of-the-day":"sup dnya.png",
 "mashed-potatoes":"pyure.PNG","village-style-potatoes":"kartoplya po-selyansʹky.PNG","buckwheat":"hrechka.PNG","pasta":"makarony.PNG","asparagus":"sparzha.png","rice-with-vegetables":"rys z ovochamy.png","vegetable-saute":"ovocheve sote.jpg","vegetable-stew":"ovochi hrylʹ.png",
 "potato-zrazy":"kartoplyani zrazi.png","chicken-pilaf":"plov.PNG","pork-roast":"pechenya.PNG","homemade-dumplings":"pelʹmeni.png","homemade-vareniki":"vareniki.png","liver-cake":"tort pechinkovyy.png","julienne-chicken-mushroom":"zhulʹyen z kurkoyu ta hrybamy.png","gratin":"hraten.png",
@@ -246,7 +248,7 @@ M.forEach(([cat,em,items],ci)=>{
   const ps=p.split("/"),ws=ps.length>1?w.split("/").map((x,k,a)=>k<a.length-1?unit(x,a[a.length-1]):x):[w];
   const rows=ps.map((pr,s)=>{const k=`${ci}_${ii}_${s}`;L[k]={name:n+(ps.length>1&&ws[s]?` (${ws[s]})`:""),price:+pr,lunch:ci==0};
    return qrow(k,ws[s],pr)}).join("");
-  return `<div class="card" data-n="${n.toLowerCase()}" data-en="${en}"><div class="ph"><i>${E(n,em)}</i><img src="${ci==0?DAYS[TD].img:im(en)}" data-s="${en}" alt="${alt(en)}" loading="lazy" onload="this.parentNode.classList.add('ok')" onerror="nx(this)"></div><div class="info"><b>${n}</b>${rows}</div></div>`}).join("")+`</section>`});
+  return `<div class="card" data-n="${n.toLowerCase()}" data-en="${en}"><div class="ph"><i>${E(n,em)}</i><img src="${im(en)}" data-s="${en}" alt="${alt(en)}" loading="lazy" onload="this.parentNode.classList.add('ok')" onerror="nx(this)"></div><div class="info"><b>${n}</b>${rows}</div></div>`}).join("")+`</section>`});
 $("menu").innerHTML=html;$("chips").innerHTML=chips;
 $("chips").onclick=e=>{const c=e.target.dataset.c;if(c)$(c).scrollIntoView({behavior:"smooth"})};
 $("s").oninput=e=>{const v=e.target.value.toLowerCase();document.querySelectorAll(".card").forEach(c=>c.classList.toggle("hide",!(c.dataset.n.includes(v)||c.dataset.en.includes(v))));document.querySelectorAll("#menu section").forEach(s=>s.classList.toggle("hide",!s.querySelector(".card:not(.hide)")))};
